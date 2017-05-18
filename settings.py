@@ -12,8 +12,8 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 # 设备配置
 # (serialno, loop）
 DEVICES = [
-    ("xxxxxx", 4),
-    ("xxxxxx", 4)
+    ("xxxxxx", 8),
+    ("oooooo", 6)
 ]
 
 # 手动配置此目录，存放日志的总目录
@@ -27,7 +27,7 @@ START_TIME = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
 LOG_ABSOULTE_ROOT_PATH = os.path.join(LOG_PATH, START_TIME)
 
 # case列表文件路径
-CASE_LIST = ""
+CASE_CONF_LIST_PATH = "/config/path/list.csv"
 
 # case文件路径
-CASE_PATH = ""
+CASE_SOURCE_PATH = "/source/path"

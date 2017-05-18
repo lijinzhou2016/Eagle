@@ -13,17 +13,7 @@ import sys
 import multiprocessing
 import settings
 
-
-#gnome-terminal --maximize --tab "Phone1" -e "bash start.sh $device1 $rootFolder phone1 device1 $refdevice1" --tab "Phone2" -e "bash start.sh $device2 $rootFolder phone2 device2 $refdevice2" --tab "Phone3" -e "bash start.sh $device3 $rootFolder phone3 device3 $refdevice3" --tab "Phone4" -e "bash start.sh $device4 $rootFolder phone4 device4 $refdevice4" --tab "Phone5" -e "bash start.sh $device5 $rootFolder phone5 device5 $refdevice5" --tab "Phone6" -e "bash start.sh $device6 $rootFolder phone6 device6 $refdevice6"
-
-
-
-with open('log.path', 'w') as f:
-    f.write(settings.LOG_ABSOULTE_ROOT_PATH)
-
-
-for serialno, loop in settings.DEVICES:
-    pass
+print sys.argv[1]
 
 
 
