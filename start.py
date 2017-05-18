@@ -27,4 +27,5 @@ for serialno, loop in settings.DEVICES:
 
 
 print start_cmd
+
 # os.system(start_cmd)
