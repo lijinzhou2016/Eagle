@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 from __future__ import unicode_literals
 import settings
-
+import time
 __author__ = "LiJinzhou"
 __date__ = "2017/5/6 下午10:03"
 
@@ -14,6 +14,12 @@ import multiprocessing
 import settings
 
 print sys.argv[1]
+print sys.argv[2]
+print sys.argv[3]
+print sys.argv[4]
+print sys.argv[5]
+
+time.sleep(5)
 
 
 
