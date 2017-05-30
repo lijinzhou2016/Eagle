@@ -323,6 +323,7 @@ class Monitor(object):
     def tombstone_handle(self, signalnum, frame):
         print "Tombstone ERROR"
         self.set_except_state(False)
+        self._pull.pull_crash("/Users/li_jinzhou/PycharmProjects/Eagle/collectlog")
 
     # Crash 处理函数
     def crash_handle(self, signalnum, frame):
@@ -403,6 +404,7 @@ class Monitor(object):
             line = logcatout.readline()
             
             if self._anr_key in line:  # 发生anr，发信号给主线程
+                print "anr"
                 self.set_connect_state(True)
                 os.kill(self._pid, self._anr_signal)
 
@@ -595,48 +597,9 @@ if __name__=="__main__":
     h = Monitor()
     h.lister()
     print os.getpid()
-    i=0
+
     while True:
-
         time.sleep(3)
-        i+=1
-        print i
-
-
-"""
-if [ `adb -s ${IPADDRESS} shell find /data/system/dropbox -name "*@*" -print | grep -c "anr@"` -ne 0 ];then
-	echo =====ANR happened==== >> $result_folder/'LOOP'$i/$current_case_folder/'case'.log
-	echo INSTRUMENTATION_STATUS: logstack=logstack.log >> $result_folder/'LOOP'$i/$current_case_folder/'case'.log
-	grep "ANR in" -A15 $result_folder/'LOOP'$i/$current_case_folder/logcat.log >> $result_folder/'LOOP'$i/$current_case_folder/logstack.log
-	adb -s ${IPADDRESS} shell dumpsys dropbox --print | grep anr >> $result_folder/'LOOP'$i/$current_case_folder/logstack.log
-	ifBug="YES"
-    fi
-    if [ `adb -s ${IPADDRESS} shell find /data/system/dropbox -name "*@*" -print | grep -c "app_crash@"` -ne 0 ];then
-	echo =====FC happened==== >> $result_folder/'LOOP'$i/$current_case_folder/'case'.log
-	echo INSTRUMENTATION_STATUS: logstack=logstack.log >> $result_folder/'LOOP'$i/$current_case_folder/'case'.log
-	grep "FATAL EXCEPTION" -A15 $result_folder/'LOOP'$i/$current_case_folder/logcat.log >> $result_folder/'LOOP'$i/$current_case_folder/logstack.log
-	adb -s ${IPADDRESS} shell dumpsys dropbox --print | grep app_crash >> $result_folder/'LOOP'$i/$current_case_folder/logstack.log
-	ifBug="YES"
-    fi
-    if [ `adb -s ${IPADDRESS} shell find /data/system/dropbox -name "*@*" -print | grep -c "TOMBSTONE@"` -ne 0 ];then
-	echo ===Tombstone happened=== >> $result_folder/'LOOP'$i/$current_case_folder/'case'.log
-	echo INSTRUMENTATION_STATUS: logstack=logstack.log >> $result_folder/'LOOP'$i/$current_case_folder/'case'.log
-	grep "Build fingerprint:" -A15 $result_folder/'LOOP'$i/$current_case_folder/logcat.log >> $result_folder/'LOOP'$i/$current_case_folder/logstack.log
-	adb -s ${IPADDRESS} shell dumpsys dropbox --print | grep TOMBSTONE >> $result_folder/'LOOP'$i/$current_case_folder/logstack.log
-	ifBug="YES"
-    fi
-    if [ `adb -s ${IPADDRESS} shell find /data/system/dropbox -name "*@*" -print | grep -c "native_crash@"` -ne 0 ];then
-	echo ===Native crash happened=== >> $result_folder/'LOOP'$i/$current_case_folder/'case'.log
-	echo INSTRUMENTATION_STATUS: logstack=logstack.log >> $result_folder/'LOOP'$i/$current_case_folder/'case'.log
-	grep "Build fingerprint:" -A15 $result_folder/'LOOP'$i/$current_case_folder/logcat.log >> $result_folder/'LOOP'$i/$current_case_folder/logstack.log
-	adb -s ${IPADDRESS} shell dumpsys dropbox --print | grep native_crash >> $result_folder/'LOOP'$i/$current_case_folder/logstack.log
-	ifBug="YES"
-    fi
-    if [ $((rebootA-rebootB)) -gt 30 ] || [ $PIDSysB -ne $PIDSysA ]; then
-	echo ===Reboot happened=== >> $result_folder/'LOOP'$i/$current_case_folder/'case'.log
-	echo INSTRUMENTATION_STATUS: logstack=logstack.log >> $result_folder/'LOOP'$i/$current_case_folder/'case'.log
-	grep "BootAnimation" -A15 $result_folder/'LOOP'$i/$current_case_folder/logcat.log >> $result_folder/'LOOP'$i/$current_case_folder/logstack.log
-	echo $ARebootTime >> $result_folder/'LOOP'$i/$current_case_folder/logstack.log
-"""
+        print "Test Running: ", time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
 
 

@@ -1800,6 +1800,7 @@ class NullHandler(Handler):
 
 # Warnings integration
 
+
 _warnings_showwarning = None
 
 def _showwarning(message, category, filename, lineno, file=None, line=None):
@@ -1862,3 +1863,21 @@ def create_log(module="myscript"):
     logger.addHandler(ch)
 
     return logger
+
+
+log=create_log("test")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

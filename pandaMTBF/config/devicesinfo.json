@@ -1,0 +1,19 @@
+{
+  "info":
+  {
+    "assistant": "true"
+  },
+  "mdevice":
+  {
+    "deviceName": "emulator-5554",
+    "platformVersion": "5.1",
+    "port": "4723"
+  },
+
+  "sdevice":
+  {
+    "sdeviceName": "emulator-5556",
+    "splatformVersion": "5.1",
+    "sport": "4725"
+  }
+}

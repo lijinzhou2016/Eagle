@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: UTF-8 -*-
-from __future__ import unicode_literals
+
 import settings
 import time
 __author__ = "LiJinzhou"
@@ -21,6 +21,11 @@ print sys.argv[4]
 time.sleep(5)
 
 
+# xxxxxx
+# 8
+# /config/path/list.csv
+# /source/path
+# /Users/li_jinzhou/PycharmProjects/Eagle/logs/20170522095652"
 
 
 class Environ(object):
@@ -89,13 +94,14 @@ def init(serial):
 
 
 if __name__ == "__main__":
-    serials = settings.SERIAL
-    process = []
+    script_conf = {
+        "serial": sys.argv[1],
+        "loop": sys.argv[2],
+        "case_list_path": sys.argv[3],
+        "case_path": sys.argv[4],
+        "log_path": sys.argv[5]
+    }
+    print script_conf
 
-    for serial in serials:
-        process.append(multiprocessing.Process(target=init, args=(serial,)))
-
-    for p in process:
-        p.start()
 
 

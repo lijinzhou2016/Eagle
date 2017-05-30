@@ -83,14 +83,7 @@ class CreateDB(object):
               Column('id', Integer, primary_key=True),       # id
               Column('serialno', String(16)),                # 设备号
               Column('sw', String(64)),                      # 软件版本
-              Column('version', String(8)),                  # Android版本号
-              Column('port', String(8)),                     # appium端口号
               Column("release_time", String(32)),            # 软件发布时间
-              Column("loop", String(8)),                     # 大循环
-              Column('assistant_serialno', String(128)),     # 辅助机设备号
-              Column('assistant_version', String(8)),        # 辅助机Android版本号
-              Column('assistant_port', String(8)),           # 辅助机appium端口号
-
               Column('start_time', DateTime),                # 开始测试时间
               Column('stop_time', DateTime),                 # 结束测试时间
               Column('total_time', String(8), default="0"),  # 测试总耗时
@@ -112,8 +105,6 @@ class CreateDB(object):
         """
         Table('detail', metadata,
               Column('id', Integer, primary_key=True),       # id
-              Column('reboot', Integer, default=0),          # 重启测试标志：1 重启测试
-              Column('assistant', Integer, default=0),       # 是否有辅助机标志位：1 有辅助机
               Column('case_name', String(128)),              # case 名称
               Column('package_name', String(32)),            # 测试应用的报名
               Column('state', Integer, default=0),           # case执行的状态
@@ -124,7 +115,7 @@ class CreateDB(object):
               Column('small_loop', Integer),                 # 本条case处在哪条小循环
               Column('log_path', String(128)),               # 本条case日志相对路径
               Column('exception_info', Text),                # 发生异常的异常信息
-              Column('pic_path', String(128)),                # 发生异常时的截图路径
+              Column('pic_path', String(128))                # 发生异常时的截图路径
               )
         metadata.create_all(self._engine)
 
