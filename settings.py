@@ -18,6 +18,9 @@ LOG_PATH = "/Users/li_jinzhou/PycharmProjects/Eagle/logs"
 # 脚本配置文件路径
 CASE_CONF_LIST_PATH = "/Users/li_jinzhou/PycharmProjects/Eagle/pandaMTBF/config/smoke.csv"
 
+# 脚本路径
+CASE_SOURCE_PATH = "/Users/li_jinzhou/PycharmProjects/Eagle/pandaMTBF"
+
 # 本次测试log根目录
 LOG_ABSOULTE_ROOT_PATH = os.path.join(LOG_PATH, START_TIME)
 
