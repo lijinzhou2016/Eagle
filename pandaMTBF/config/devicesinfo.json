@@ -1,7 +1,9 @@
 {
   "info":
   {
-    "assistant": "false"
+    "assistant": "true",
+    "win_appium_path":"D:\\backup\\n008327\\AppData\\Local\\Programs\\appium-desktop\\resources\\app\\node_modules\\appium\\build\\lib\\main.js",
+    "mac_appium_path":"/Applications/Appium.app/Contents/Resources/node_modules/appium/build/lib/main.js"
   },
   "mdevice":
   {
@@ -12,7 +14,7 @@
 
   "sdevice":
   {
-    "sdeviceName": "emulator-5556",
+    "sdeviceName": "91QEBNB222BB",
     "splatformVersion": "5.1",
     "sport": "4725"
   }
