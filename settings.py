@@ -13,13 +13,13 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 START_TIME = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
 
 # 存放日志的总目录
-LOG_PATH = "/Users/li_jinzhou/PycharmProjects/Eagle/logs"
+LOG_PATH = "/work/pj/Eagle/logs"
 
 # 脚本配置文件路径
-CASE_CONF_LIST_PATH = "/Users/li_jinzhou/PycharmProjects/Eagle/pandaMTBF/config/smoke.csv"
+CASE_CONF_LIST_PATH = "/work/pj/Eagle/pandaMTBF/smoke.csv"
 
 # 脚本路径
-CASE_SOURCE_PATH = "/Users/li_jinzhou/PycharmProjects/Eagle/pandaMTBF"
+CASE_SOURCE_PATH = "/work/pj/Eagle/pandaMTBF"
 
 # 本次测试log根目录
 LOG_ABSOULTE_ROOT_PATH = os.path.join(LOG_PATH, START_TIME)
@@ -34,18 +34,20 @@ DEVICES = {
         "version": "5.1",
         "port": "4723",
 
-        "assistant_serialno": "",
-        "assistant_version": "",
-        "assistant_port": ""
+        "assistant": "true",
+        "assistant_serialno": "91QEBNB222",
+        "assistant_version": "5.1",
+        "assistant_port": "4725"
     },
 
     "device2":
     {
         "loop": "8",
-        "serialno": "A02AECNT224AZ",
+        "serialno": "91QEBNB222BB",
         "version": "5.1",
-        "port": "4723",
+        "port": "4727",
 
+        "assistant": "false",
         "assistant_serialno": "",
         "assistant_version": "",
         "assistant_port": ""

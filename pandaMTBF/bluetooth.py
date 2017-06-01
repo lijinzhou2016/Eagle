@@ -53,19 +53,14 @@ class AndroidTestCases(frame.BaseCase):
         self.clear()
 
 
-    def test_connected_and_disconnected(self):
+    def test_enter_bluetooth_view(self):
         """
         蓝牙配对与取消
         :return:
         """
         self.logger.debug("enter bluetooth view")
         self.driver.find_element_by_android_uiautomator('new UiSelector().text("蓝牙")').click()
-        time.sleep(5)
-        self.driver.find_element_by_android_uiautomator('new UiSelector().text("ic")').click()
-        time.sleep(5)
-        self.s_driver.find_element_by_android_uiautomator('new UiSelector().text("配对")').click()
         time.sleep(2)
-
 
         self.result.success()
 

@@ -4,6 +4,7 @@
 __author__ = "LiJinzhou"
 __date__ = "2017/5/7 上午1:16"
 
+
 import os
 import multiprocessing
 import settings
@@ -20,40 +21,57 @@ def write_file(name, msg, mode):
         if msg:
             f.write(msg+"\n")
 
+# 本次
 write_file("path.tmp", log_absoulte_root_path, 'w')
 
 cmd_head = 'gnome-terminal --maximize'
-start_cmd = cmd_head
-cmd_list = []
+script_cmd = cmd_head
+appium_server_cmd = cmd_head
+
+
+
 script = os.path.join(settings.BASE_DIR, 'do.py')
+appium = os.path.join(settings.BASE_DIR, 'appium_server.sh')
+log_path = log_absoulte_root_path
+conf_path = settings.CASE_CONF_LIST_PATH
+case_path = settings.CASE_SOURCE_PATH
+devices = settings.DEVICES
 
-for serialno, loop in settings.DEVICES:
-    start_cmd += ' --tab -t "{0}" '.format(serialno) \
-                 + '-e "python {0} {1} {2} {3} {4} {5}"'.format(
-            script, serialno, loop, settings.CASE_CONF_LIST_PATH, settings.CASE_SOURCE_PATH, log_absoulte_root_path)
+for device in devices.keys():
+    tab_name = device
+    loop = devices[device]["loop"]
+    assistant = devices[device]["assistant"] or "false"
+    serialno = devices[device]["serialno"]
+    version = devices[device]["version"]
+    port = devices[device]["port"]
+    assistant_serialno = devices[device]["assistant_serialno"] or "0"
+    assistant_version = devices[device]["assistant_version"] or "0"
+    assistant_port = devices[device]["assistant_port"] or "0"
 
-    tmp_cmd = cmd_head + ' --tab -t "{0}" '.format(serialno) \
-                       + '-e "python {0} {1} {2} {3} {4} {5}"'.format(
-            script, serialno, loop, settings.CASE_CONF_LIST_PATH, settings.CASE_SOURCE_PATH, log_absoulte_root_path)
-    write_file(serialno+".sh", tmp_cmd, "w")
-    cmd_list.append(tmp_cmd)
+    if loop == "" or serialno == "" or version == "" or port == "":
+        raise ValueError
+    if assistant == "true" and (assistant_serialno=="" or assistant_version=="" or assistant_port==""):
+        raise ValueError
+
+    appium_server_cmd += ' --tab -t "{0}_server" '.format(tab_name) \
+                             + '-e "bash {0} {1} {2}"'.format(appium, port, serialno)
+    if assistant == "true":
+        appium_server_cmd += ' --tab -t "{0}_assistant_server" '.format(tab_name) \
+                             + '-e "bash {0} {1} {2}"'.format(appium, assistant_port, assistant_serialno)
+
+    script_cmd += ' --tab -t "{0}" '.format(tab_name) \
+        + '-e "python {0} {1} {2} {3} {4} {5} {6} {7} {8} {9} {10} {11}"'.format(
+        script, loop, assistant, log_path, conf_path, case_path, serialno,
+        version, port, assistant_serialno, assistant_version, assistant_port)
+
 
 print "="*100
 print "====", " "*40, u"开始测试", " "*40, "===="
 print "="*100
 print
-print u"若某台设备异常终止，请执行以下相应命令"
-for cmd in cmd_list:
-    print cmd
+
+print script_cmd
 print
-
-print u"若发生断电等异常，所有设备全部停止，请执行以下命令继续测试"
-print start_cmd
-write_file("restart.sh", start_cmd, "w")
-os.system("chmod 777 " + os.path.join(settings.BASE_DIR, "*.sh"))
-print
-
-print u"生成报告，请执行以下命令"
-print u"此命令正在开发过程中，请耐心等待........"
-
-# os.system(start_cmd)
+print appium_server_cmd
+os.system(appium_server_cmd)
+os.system(script_cmd)
