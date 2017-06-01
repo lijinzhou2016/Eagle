@@ -13,10 +13,13 @@ import os
 
 platform = sys.platform
 
-
 def sub(cmd):
     print cmd
     subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True).wait()
+#
+# def win_sbu(cmd):
+#     print cmd
+#     os.system(cmd)
 
 
 def mac_server_start():

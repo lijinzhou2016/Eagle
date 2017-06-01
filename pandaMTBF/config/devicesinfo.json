@@ -1,11 +1,11 @@
 {
   "info":
   {
-    "assistant": "true"
+    "assistant": "false"
   },
   "mdevice":
   {
-    "deviceName": "emulator-5554",
+    "deviceName": "A02AECNT224AZ",
     "platformVersion": "5.1",
     "port": "4723"
   },
