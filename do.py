@@ -36,21 +36,21 @@ sys.argv:
 
 """
 
-# loop = sys.argv[1]
-# assistant = sys.argv[2]
-# log_absoulte_root_path = sys.argv[3]
-# case_conf_path = sys.argv[4]
-# case_path = sys.argv[5]
-# serialno = sys.argv[6]
-# version = sys.argv[7]
-# port = sys.argv[8]
-# assistant_serialno = sys.argv[9]
-# assistant_version = sys.argv[10]
-# assistant_port = sys.argv[11]
-#
-# os.environ.setdefault("deviceName", serialno)
-# os.environ.setdefault("assistant", assistant)
-# os.environ.setdefault("sdeviceName", assistant_serialno)
+loop = sys.argv[1]
+assistant = sys.argv[2]
+log_absoulte_root_path = sys.argv[3]
+case_conf_path = sys.argv[4]
+case_path = sys.argv[5]
+serialno = sys.argv[6]
+version = sys.argv[7]
+port = sys.argv[8]
+assistant_serialno = sys.argv[9]
+assistant_version = sys.argv[10]
+assistant_port = sys.argv[11]
+
+os.environ.setdefault("deviceName", serialno)
+os.environ.setdefault("assistant", assistant)
+os.environ.setdefault("sdeviceName", assistant_serialno)
 
 print "="*100
 print "====", " "*40, u"开始测试", " "*40, "===="
@@ -59,16 +59,19 @@ print
 
 os.environ.setdefault("deviceName", "emulator-5554")
 os.environ.setdefault("assistant", "false")
-case_conf_path = "/Users/li_jinzhou/PycharmProjects/Eagle/pandaMTBF/config/smoke.csv"
-case_path = "/Users/li_jinzhou/PycharmProjects/Eagle/pandaMTBF"
-loop = 3
+# case_conf_path = "/Users/li_jinzhou/PycharmProjects/Eagle/pandaMTBF/config/smoke.csv"
+# case_path = "/Users/li_jinzhou/PycharmProjects/Eagle/pandaMTBF"
+# loop = 3
 with open(case_conf_path) as f:
     cases = f.readlines()
-
-for L in range(loop):
+time.sleep(3)
+for L in range(int(loop)):
     for case in cases:
+        if case.strip().startswith("#"):
+            continue
         case_item = case.strip().replace("\n", "").split(",")
         run_case_cmd = "bash " + os.path.join(settings.BASE_DIR, "cmdline.sh") + " " + case_path + " " + case_item[0]
+        print run_case_cmd
         for l in range(int(case_item[1])):
             print
             print "="*20, case_item[0], " Loop:", L+1, " loop:", l+1, "="*20

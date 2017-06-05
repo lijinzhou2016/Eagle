@@ -16,7 +16,7 @@ START_TIME = time.strftime("%Y%m%d%H%M%S", time.localtime(time.time()))
 LOG_PATH = "/work/pj/Eagle/logs"
 
 # 脚本配置文件路径
-CASE_CONF_LIST_PATH = "/work/pj/Eagle/pandaMTBF/smoke.csv"
+CASE_CONF_LIST_PATH = "/work/pj/Eagle/pandaMTBF/config/smoke.csv"
 
 # 脚本路径
 CASE_SOURCE_PATH = "/work/pj/Eagle/pandaMTBF"
@@ -29,28 +29,28 @@ LOG_ABSOULTE_ROOT_PATH = os.path.join(LOG_PATH, START_TIME)
 DEVICES = {
     "device1":
     {
-        "loop": "8",
+        "loop": "3",
         "serialno": "A02AECNT224AZ",
         "version": "5.1",
         "port": "4723",
 
-        "assistant": "true",
+        "assistant": "false",
         "assistant_serialno": "91QEBNB222",
         "assistant_version": "5.1",
         "assistant_port": "4725"
-    },
+    }
 
-    "device2":
-    {
-        "loop": "8",
-        "serialno": "91QEBNB222BB",
-        "version": "5.1",
-        "port": "4727",
-
-        "assistant": "false",
-        "assistant_serialno": "",
-        "assistant_version": "",
-        "assistant_port": ""
-    },
+    # "device2":
+    # {
+    #     "loop": "3",
+    #     "serialno": "91QEBNB222BB",
+    #     "version": "5.1",
+    #     "port": "4727",
+    #
+    #     "assistant": "false",
+    #     "assistant_serialno": "",
+    #     "assistant_version": "",
+    #     "assistant_port": ""
+    # },
 
 }

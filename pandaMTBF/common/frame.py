@@ -17,7 +17,7 @@ json_data = load(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__
 
 def get_conf(key):
     return os.environ.get(key)
-
+print get_conf("deviceName")
 class BaseCase(unittest.TestCase):
     start_time = ""
     end_time = ""

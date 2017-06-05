@@ -7,6 +7,7 @@ __date__ = "2017/5/7 上午1:16"
 
 import os
 import settings
+import time
 
 
 def write_file(name, msg, mode):
@@ -74,4 +75,5 @@ print script_cmd
 print
 print appium_server_cmd
 os.system(appium_server_cmd)
+time.sleep(5)
 os.system(script_cmd)
