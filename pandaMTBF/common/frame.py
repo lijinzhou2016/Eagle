@@ -25,7 +25,9 @@ class BaseCase(unittest.TestCase):
     def init(self):
         sdriver = None
         driver = self.init_driver()
-        if get_conf("assistant") or json_data["info"]["assistant"] == "true":
+        if get_conf("assistant") is None and json_data["info"]["assistant"] == "true":
+            sdriver = self.init_sdriver()
+        if get_conf("assistant") == "true":
             sdriver = self.init_sdriver()
         return driver, sdriver
 
@@ -82,11 +84,11 @@ class BaseCase(unittest.TestCase):
     def clear(self):
         if self.result.is_execute == 0:
             log.warn("Please give the result by self.result.success() or self.result.fail()")
-
-        self.driver.quit()
-        if self.s_driver:
+        try:
+            self.driver.quit()
             self.s_driver.quit()
-        time.sleep(1)
+        except Exception,e:
+            pass
 
     class result(object):
         is_execute = 0

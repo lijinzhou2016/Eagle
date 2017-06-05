@@ -58,6 +58,7 @@ class AndroidTestCases(frame.BaseCase):
         蓝牙配对与取消
         :return:
         """
+        print "hasdhfashdfahs"
         self.logger.debug("enter bluetooth view")
         self.driver.find_element_by_android_uiautomator('new UiSelector().text("蓝牙")').click()
         time.sleep(2)

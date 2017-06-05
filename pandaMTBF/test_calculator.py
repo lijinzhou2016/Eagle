@@ -39,10 +39,11 @@ class ModuleName(frame.DecorateDriver):
 class AndroidTestCases(frame.BaseCase):
 
     def setUp(self):
-        self.driver, self.s_driver = self.init()
+        self.driver = self.init_driver()
+        # self.s_driver = self.init_sdriver()
         self.m_module = ModuleName(self.driver)
-        if self.s_driver:
-            self.s_module = ModuleName(self.s_driver)
+        # if self.s_driver:
+        #     self.s_module = ModuleName(self.s_driver)
 
 
     def tearDown(self):
@@ -61,6 +62,7 @@ class AndroidTestCases(frame.BaseCase):
         self.logger.debug("press 5")
         self.driver.find_element_by_id("eq").click()
         self.logger.debug("press =")
+        self.logger.debug("result 13")
         self.result.success()
 
 
@@ -91,13 +93,13 @@ class AndroidTestCases(frame.BaseCase):
         self.delay(1)
         self.result.success()
 
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(AndroidTestCases('test_1'))
-    # suite.addTest(AndroidTestCases('test_2'))
-    return suite
-
-if __name__ == "__main__":
-    unittest.main()
-    runner = unittest.TextTestRunner(verbosity=2)
-    runner.run(suite())
+# def suite():
+#     suite = unittest.TestSuite()
+#     suite.addTest(AndroidTestCases('test_1'))
+#     suite.addTest(AndroidTestCases('test_2'))
+#     return suite
+#
+# if __name__ == "__main__":
+#     unittest.main()
+#     runner = unittest.TextTestRunner(verbosity=2)
+#     runner.run(suite())
