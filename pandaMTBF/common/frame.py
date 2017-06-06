@@ -17,7 +17,11 @@ json_data = load(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__
 
 def get_conf(key):
     return os.environ.get(key)
-print get_conf("deviceName")
+
+print "mdevice:", get_conf("deviceName"), get_conf("port")
+if get_conf("assistant") == "true":
+    print "sdevice:", get_conf("sdeviceName"), get_conf("sport")
+print
 class BaseCase(unittest.TestCase):
     start_time = ""
     end_time = ""
@@ -46,15 +50,13 @@ class BaseCase(unittest.TestCase):
         self.start_time = time.time()
         driver = webdriver.Remote(url, desired_caps)
         # self.decorate = DecorateDriver(self.driver)
-        time.sleep(1)
         try:
             if driver.current_activity == get_conf("appActivity"):
-                log.debug("Launch app Success")
+                log.debug("mdevice: Launch app Success")
             else:
-                log.exception("Launch app Failed")
+                raise OSError("mdevice: Launch Failed")
         except BaseException, e:
-            self.logger.exception("error")
-            sys.exit()
+            raise OSError("mdevice: Launch Failed")
         return driver
 
 
@@ -69,15 +71,14 @@ class BaseCase(unittest.TestCase):
         sdesired_caps["resetKeyboard"] = "True"
         surl = 'http://127.0.0.1:{0}/wd/hub'.format(get_conf("sport") or json_data["sdevice"]["sport"])
         sdriver = webdriver.Remote(surl, sdesired_caps)
-        time.sleep(1)
+        # time.sleep(1)
         try:
             if sdriver.current_activity == get_conf("sappActivity"):
-                log.debug("Launch app Success")
+                log.debug("sdevice: Launch app Success")
             else:
-                log.exception("Launch app Failed")
+                raise OSError("sdevice: Launch Failed")
         except BaseException, e:
-            self.logger.exception("error")
-            sys.exit()
+            raise OSError("sdevice: Launch Failed")
         return sdriver
 
 

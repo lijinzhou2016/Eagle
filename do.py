@@ -17,6 +17,7 @@ import settings
 
 
 
+
 time.sleep(1)
 
 """
@@ -49,34 +50,39 @@ assistant_version = sys.argv[10]
 assistant_port = sys.argv[11]
 
 os.environ.setdefault("deviceName", serialno)
+os.environ.setdefault("port", port)
 os.environ.setdefault("assistant", assistant)
 os.environ.setdefault("sdeviceName", assistant_serialno)
+os.environ.setdefault("sport", assistant_port)
 
 print "="*100
 print "====", " "*40, u"开始测试", " "*40, "===="
 print "="*100
 print
 
-os.environ.setdefault("deviceName", "emulator-5554")
-os.environ.setdefault("assistant", "false")
+# os.environ.setdefault("deviceName", "emulator-5554")
+# os.environ.setdefault("assistant", "false")
 # case_conf_path = "/Users/li_jinzhou/PycharmProjects/Eagle/pandaMTBF/config/smoke.csv"
 # case_path = "/Users/li_jinzhou/PycharmProjects/Eagle/pandaMTBF"
 # loop = 3
 with open(case_conf_path) as f:
     cases = f.readlines()
-time.sleep(3)
+
+
+
+
 for L in range(int(loop)):
     for case in cases:
         if case.strip().startswith("#"):
             continue
         case_item = case.strip().replace("\n", "").split(",")
         run_case_cmd = "bash " + os.path.join(settings.BASE_DIR, "cmdline.sh") + " " + case_path + " " + case_item[0]
-        print run_case_cmd
+        # print run_case_cmd
         for l in range(int(case_item[1])):
-            print
-            print "="*20, case_item[0], " Loop:", L+1, " loop:", l+1, "="*20
-            print
+            print "="*20, case_item[0], " LOOP:", L+1, " loop:", l+1, "="*20, "\n"
+            print "Start time:", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time()))
             os.system(run_case_cmd)
-        break
 
-
+print "test over!"
+while True:
+    pass

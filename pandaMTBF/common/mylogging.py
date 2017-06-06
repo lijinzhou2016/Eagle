@@ -1854,7 +1854,7 @@ def create_log(module="myscript"):
     ch = StreamHandler()
     
     # 定义handler的输出格式
-    formatter = Formatter('%(levelname)s %(asctime)s [ %(filename)s, %(module)s, %(funcName)s, line:%(lineno)d ] : %(message)s')
+    formatter = Formatter('%(levelname)s %(asctime)s [ %(filename)s, %(module)s, %(funcName)s, line:%(lineno)d ] - %(message)s')
     fh.setFormatter(formatter)
     ch.setFormatter(formatter)
     

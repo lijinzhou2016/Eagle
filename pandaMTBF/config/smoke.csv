@@ -1,2 +1,2 @@
-test_calculator.AndroidTestCases.test_1,2
-bluetooth.AndroidTestCases.test_enter_bluetooth_view,2
+#test_calculator.AndroidTestCases.test_1,2
+bluetooth.AndroidTestCases.test_connect_and_disconnect,100

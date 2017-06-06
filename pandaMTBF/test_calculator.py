@@ -4,14 +4,15 @@
 import os
 import sys
 import unittest
-
+import time
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 from common import frame
 
 
 # 主设备待测app包名和activity
 # 必填
-appPackage = 'com.android.calculator2'
+# appPackage = 'com.android.calculator2'
+appPackage = "com.meizu.flyme.calculator"
 appActivity = ".Calculator"
 
 # 辅助设备待测app包名和activity
@@ -51,14 +52,18 @@ class AndroidTestCases(frame.BaseCase):
 
 
     def test_1(self):
-        self.logger.debug("keyia")
-
-        self.driver.find_element_by_id("digit_8").click()
+        try:
+            time.sleep(1)
+            self.driver.find_element_by_android_uiautomator('new UiSelector().text("确定")').click()
+            time.sleep(1)
+        except:
+            pass
+        self.driver.find_element_by_id("digit8").click()
         self.logger.debug("press 8")
 
-        self.driver.find_element_by_id("op_add").click()
+        self.driver.find_element_by_id("plus").click()
         self.logger.debug("press +")
-        self.driver.find_element_by_id("digit_5").click()
+        self.driver.find_element_by_id("digit5").click()
         self.logger.debug("press 5")
         self.driver.find_element_by_id("eq").click()
         self.logger.debug("press =")

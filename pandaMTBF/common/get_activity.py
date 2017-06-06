@@ -12,8 +12,8 @@ pp ="([a-zA-Z]+\.)[^}]+(\w+\s|[^}]+Activity)"
 
 p_re = re.compile(p)
 pp_re = re.compile(pp)
-
+# print log
 log = p_re.search(log).group(0)
-#print log
+# print log
 log = pp_re.search(log).group(0).strip()
 print "adb shell am start -n '%s'" %log

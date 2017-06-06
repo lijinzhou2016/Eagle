@@ -8,6 +8,8 @@ __date__ = "2017/5/7 上午1:16"
 import os
 import settings
 import time
+import subprocess
+import re
 
 
 def write_file(name, msg, mode):
@@ -66,14 +68,35 @@ for device in devices.keys():
         version, port, assistant_serialno, assistant_version, assistant_port)
 
 
+bad_thread = subprocess.Popen("ps aux | grep appium",
+                 stderr=subprocess.PIPE,
+                 stdout=subprocess.PIPE,
+                 shell=True).communicate()[0]
+
+bad_thread_list = bad_thread.split("\n")
+p = "\s\d+\s"
+pp = re.compile(p)
+
+for thread in bad_thread_list:
+    try:
+        if thread and "grep" not in thread:
+            thread = pp.search(thread).group(0).strip()
+            print "Kill bad appium process {0}".format(thread)
+            os.system("kill -9 {0}".format(thread))
+    except:
+        pass
+
 print "="*100
 print "====", " "*40, u"开始测试", " "*40, "===="
 print "="*100
 print
 
-print script_cmd
-print
+print "### 启动appium"
 print appium_server_cmd
+print
 os.system(appium_server_cmd)
+
 time.sleep(5)
+print "### 启动脚本"
+print script_cmd
 os.system(script_cmd)
