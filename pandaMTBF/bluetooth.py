@@ -25,7 +25,7 @@ os.environ.setdefault("appActivity", appActivity)
 os.environ.setdefault("sappPackage", sappPackage)
 os.environ.setdefault("sappActivity", sappActivity)
 
-bt_name = "A_" + str(time.time()).split(".")[0]
+bt_name = "A_auto_" + str(time.time()).split(".")[0]
 
 class Bluetooth(frame.BaseCase):
 
@@ -37,19 +37,20 @@ class Bluetooth(frame.BaseCase):
         self.driver.find_element_by_android_uiautomator('new UiSelector().text("蓝牙")').click()
         time.sleep(2)
         # btns = self.driver.find_elements_by_id("com.meizu.connectivitysettings:id/switchWidget")
+        # self.logger.debug(str(btns))
         # for btn in btns:
-        #     state = btn.text()
-        #     if state == "关闭":
+        #     if not btn.is_checked():
         #         btn.click()
-        #         time.sleep(3)
+        #         self.delay(2)
         #
         # for btn in btns:
-        #     state = btn.text()
-        #     if state == "关闭":
-        #         self.logger.error("open bluetooth failed")
+        #     if not btn.is_checked():
+        #         self.logger.error(device+": open wifi failed")
+        #         self.result.fail()
         #         return False
-        self.logger.debug(device+": open bluetooth success")
-        return True
+        #
+        # self.logger.debug(device+": open bluetooth success")
+        # return True
 
     def rename_bluetooth(self, device):
         self.driver.find_element_by_android_uiautomator('new UiSelector().text("蓝牙名称")').click()
@@ -100,23 +101,46 @@ class AndroidTestCases(frame.BaseCase):
         :return:
         """
 
-
         self.m_bt.open_bluetooth("mdevice")
         self.m_bt.disconnect("mdevice")
         self.s_bt.open_bluetooth("sdevice")
         self.s_bt.rename_bluetooth("sdevice")
+        self.s_bt.disconnect("sdevice")
 
         try:
             self.logger.debug("flush list")
             self.driver.find_element_by_id("com.meizu.connectivitysettings:id/switchWidget").click()
             self.delay(2)
             self.driver.find_element_by_id("com.meizu.connectivitysettings:id/switchWidget").click()
-            self.logger.debug("wait for connect ... ")
-            self.delay(8)
-            self.driver.find_element_by_android_uiautomator('new UiSelector().text("{0}")'.format(bt_name)).click()
+            self.delay(5)
+            if len(self.driver.find_elements_by_id("android:id/icon")) == 0:
+                self.driver.find_element_by_id("com.meizu.connectivitysettings:id/switchWidget").click()
+                self.delay(5)
 
-            self.delay(8)
-            self.s_driver.find_element_by_android_uiautomator('new UiSelector().text("配对")').click()
+            self.logger.debug("wait for connect ... ")
+            for i in range(10):
+                try:
+                    self.driver.find_element_by_android_uiautomator('new UiSelector().text("{0}")'.format(bt_name)).click()
+                    time.sleep(1)
+                    break
+                except:
+                    time.sleep(1)
+                if i > 9:
+                    self.logger.error("find the bt timeout")
+                    self.result.fail()
+                    return
+
+            for i in range(15):
+                try:
+                    self.s_driver.find_element_by_android_uiautomator('new UiSelector().text("配对")').click()
+                    time.sleep(1)
+                    break
+                except:
+                    time.sleep(1)
+                if i > 14:
+                    self.logger.error("connect bt timeout")
+                    self.result.fail()
+                    return
         except:
             self.logger.error("connect timeout")
             self.result.fail()

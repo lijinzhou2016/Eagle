@@ -5,48 +5,32 @@ from sqlalchemy import create_engine, Column, String, Integer
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Table, MetaData
 from sqlalchemy.ext.declarative import declarative_base
-from new import classobj
 
 
 
-engine = create_engine('sqlite:////Users/li_jinzhou/PycharmProjects/Eagle/collectlog/date.sqlite')
+engine = create_engine('sqlite:////work/pj/Eagle/collectlog/test.sqlite')
 metadata = MetaData()
 Base = declarative_base()
 
-# users_table = Table('users', metadata,
-#                     Column('id', Integer, primary_key=True),
-#                     Column('name', String(8)),
-#                     Column('fullname', String(8)),
-#                     Column('password', String(8))
-#                     )
-#
-# test_table = Table('test', metadata,
-#                     Column('id', Integer, primary_key=True),
-#                     Column('name', String(8)),
-#                     Column('fullname', String(8)),
-#                     Column('password', String(8))
-#                     )
-serialno = ""
-def set_serialno(serial):
-    global serialno
-    serialno = serial
+users_table = Table('users', metadata,
+                    Column('id', Integer, primary_key=True),
+                    Column('name', String(8)),
+                    Column('fullname', String(8)),
+                    Column('password', String(8))
+                    )
 
-def create_db():
-    global serialno
-    Table("summary", metadata,
-          Column('id', Integer, primary_key=True),
-          )
-
-    Table(serialno, metadata,
-          Column('id', Integer, primary_key=True),
-          )
-
-    metadata.create_all(engine)
+test_table = Table('test', metadata,
+                    Column('id', Integer, primary_key=True),
+                    Column('name', String(8)),
+                    Column('fullname', String(8)),
+                    Column('password', String(8))
+                    )
+metadata.create_all(engine)
 
 
-class Summary(Base):
+class users(Base):
 
-     __tablename__ = 'summary'
+     __tablename__ = 'users'
 
      id = Column(Integer, primary_key=True)
      name = Column(String)
@@ -54,21 +38,24 @@ class Summary(Base):
      password = Column(String)
 
 
-class Device(Base):
-    __tablename__ = 'device'
+class test(Base):
+    __tablename__ = 'test'
 
     id = Column(Integer, primary_key=True)
     name = Column(String)
     fullname = Column(String)
     password = Column(String)
 
-def create_device_class():
-    global serialno
-    globals()[serialno] = type(serialno, (Device, ), {"__tablename__": serialno})
-
-
 Session = sessionmaker(bind=engine)
 session = Session()
+
+ed_user = users(name='ed', fullname='Ed Jones', password='edspassword')
+session.add(ed_user)
+
+for name, fullname in session.query(users.name, users.fullname):
+    print name,fullname
+
+# t = Summary(id="sdfs")
 
 # ed_user = User(name='ed', fullname='Ed Jones', password='edspassword')
 # ed_user1 = User(name='ed1', fullname='Ed Jones1', password='edspassword')
