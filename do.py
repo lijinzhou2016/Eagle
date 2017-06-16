@@ -15,6 +15,7 @@ import sys
 import multiprocessing
 import settings
 import subprocess
+import traceback
 
 sys.path.append(os.path.join(settings.BASE_DIR))
 from collectlog import db as database
@@ -85,16 +86,14 @@ if not os.path.exists(device_log_path):
 if assistant == "true":
     if not os.path.exists(sdevice_log_path):
         os.makedirs(sdevice_log_path)
-print "begin"
 time.sleep(1)
 # summary
 
 def get_device_info(cmd):
     format_cmd = "adb -s " + serialno + " shell " + cmd
-    print format_cmd
     result = str(subprocess.Popen(format_cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True).communicate()[0])
-    print result
     return result
+
 summary = Summary(
     id=1,
     serialno=serialno,
@@ -120,7 +119,6 @@ summary = Summary(
     log_root_path=log_absoulte_root_path
 )
 
-print "go on"
 time.sleep(1)
 
 detail_list=[]
@@ -164,10 +162,10 @@ print type(db)
 time.sleep(1)
 
 db.add(summary)
-print "after add"
+# print "after add"
 time.sleep(1)
 db.commit()
-print "after commit"
+# print "after commit"
 time.sleep(1)
 db.add_all(detail_list)
 db.commit()
@@ -182,42 +180,46 @@ time.sleep(1)
 s = db.query(Summary).all()[0]
 s.total_case=0
 for d in db.query(Detail).filter(Detail.state == 0).all():
-    d.state = 1
-    d.start_time_s = str(time.time())
-    d.start_time = str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())))
+    try:
+        d.state = 1
+        d.start_time_s = str(time.time())
+        d.start_time = str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())))
 
-    run_case_cmd = "bash " + os.path.join(settings.BASE_DIR, "cmdline.sh") + " " + case_path + " " + d.case_name
-    print "="*20, d.case_name, " LOOP:", d.big_loop, " loop:", d.small_loop, "="*20, "\n"
-    print "Start time:", d.start_time
-    db.commit()
-    print d.m_log_path
-    # os.environ.pop("m_log_path", "false")
-    os.environ.setdefault("m_log_path", d.m_log_path)
-    # os.environ.pop("m_log_path")
-    print os.environ.get("m_log_path")
-    if not os.path.exists(d.m_log_path):
-        os.makedirs(d.m_log_path)
+        run_case_cmd = "bash " + os.path.join(settings.BASE_DIR, "cmdline.sh") + " " + case_path + " " + d.case_name
+        print "="*20, d.case_name, " LOOP:", d.big_loop, " loop:", d.small_loop, "="*20, "\n"
+        print "Start time:", d.start_time
+        db.commit()
+        # print d.m_log_path
+        os.environ.pop("m_log_path", "false")
+        os.environ.setdefault("m_log_path", d.m_log_path)
+        # os.environ.pop("m_log_path")
+        # print os.environ.get("m_log_path")
+        if not os.path.exists(d.m_log_path):
+            os.makedirs(d.m_log_path)
 
-    os.system(run_case_cmd)
+        os.system(run_case_cmd)
 
-    d.stop_time_s = str(time.time())
-    d.stop_time = str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())))
-    d.total_time = str((float(d.start_time_s) - float(d.start_time_s)))
+        d.stop_time_s = str(time.time())
+        d.stop_time = str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())))
+        d.total_time = str((float(d.start_time_s) - float(d.start_time_s)))
 
-    # 脚本执行结果状态
-    with open(os.path.join(d.m_log_path, "case.log")) as f:
-        lines = f.readlines()
-    for line in lines:
-        if "Test Result - Pass" in line:
-            d.state=2
-            break
-        if "Test Result - Failed" in line:
-            d.state=4
-    if d.state == 1:
-        d.state = 4
+        # 脚本执行结果状态
+        with open(os.path.join(d.m_log_path, "case.log"), 'r') as f:
+            lines = f.readlines()
+        for line in lines:
+            if "Test Result - Pass" in line:
+                d.state=2
+                break
+            if "Test Result - Failed" in line:
+                d.state=4
+        if d.state == 1:
+            d.state = 4
 
-    s.stop_time = d.stop_time
-    s.stop_time_s = d.stop_time_s
-    s.total_time = str(float(d.stop_time_s) - float(s.start_time_s))
-    db.commit()
+        s.stop_time = d.stop_time
+        s.stop_time_s = d.stop_time_s
+        s.total_time = str(float(d.stop_time_s) - float(s.start_time_s))
+        db.commit()
+    except BaseException, e:
+        print "case loop"
+        traceback.print_exc()
 
