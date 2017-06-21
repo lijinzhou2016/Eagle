@@ -29,12 +29,12 @@ LOG_ABSOULTE_ROOT_PATH = os.path.join(LOG_PATH, START_TIME)
 DEVICES = {
     "device1":
     {
-        "loop": "10",
-        "serialno": "A02AECNT224AZ",
-        "version": "5.1",
+        "loop": "1000",
+        "serialno": "022BTF7N38043454",
+        "version": "4.2",
         "port": "4723",
 
-        "assistant": "true",
+        "assistant": "false",
         "assistant_serialno": "91QEBNB222BB",
         "assistant_version": "5.1",
         "assistant_port": "4725"

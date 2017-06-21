@@ -27,6 +27,40 @@ format_serialno = ""
 __all__ = ["DeviceSerialno", "Execute", "DumpsysInfo", "PullLog", "Monitor",
            "Time", "Logcat", "get_platform_name", "Document"]
 
+class ADB(object):
+    def __init__(self, serial=None, adb_server_host=None, adb_server_port=None):
+        self.__adb_cmd = None
+        self.default_serial = serial if serial else os.environ.get("ANDROID_SERIAL", None)
+        self.adb_server_host = str(adb_server_host if adb_server_host else 'localhost')
+        self.adb_server_port = str(adb_server_port if adb_server_port else '5037')
+        self.adbHostPortOptions = []
+        if self.adb_server_host not in ['localhost', '127.0.0.1']:
+            self.adbHostPortOptions += ["-H", self.adb_server_host]
+        if self.adb_server_port != '5037':
+            self.adbHostPortOptions += ["-P", self.adb_server_port]
+
+    @property
+    def adb(self):
+        if self.__adb_cmd is None:
+            if "ANDROID_HOME" in os.environ:
+                filename = "adb.exe" if os.name == 'nt' else "adb"
+                adb_cmd = os.path.join(os.environ["ANDROID_HOME"], "platform-tools", filename)
+                if not os.path.exists(adb_cmd):
+                    raise EnvironmentError(
+                        "Adb not found in $ANDROID_HOME path: %s." % os.environ["ANDROID_HOME"])
+            else:
+                import distutils
+                if "spawn" not in dir(distutils):
+                    import distutils.spawn
+                adb_cmd = distutils.spawn.find_executable("adb")
+                print adb_cmd
+                if adb_cmd:
+                    adb_cmd = os.path.realpath(adb_cmd)
+                else:
+                    raise EnvironmentError("$ANDROID_HOME environment not set.")
+            self.__adb_cmd = adb_cmd
+        return self.__adb_cmd
+Adb = ADB()
 
 class DeviceSerialno(object):
     
@@ -59,19 +93,20 @@ class DeviceSerialno(object):
         
         serialno = device
         if serialno:
-            format_serialno = "-s " + serialno
+            format_serialno = " -s " + serialno
             
     @classmethod
     def device_boot_stamp(cls):  # 设备启动时的时间戳
         global format_serialno
-        _cmd = "adb " + format_serialno + " shell cat  /proc/uptime"
-        return float(Time.get_time_stamp()) - float(cls._execute(_cmd).split(" ")[0])
+        _cmd = Adb.adb + format_serialno + " shell cat /proc/uptime"
+        print _cmd
+        return float(Time.get_time_stamp()) - float(cls._execute(_cmd).split(" ")[0].strip())
 
 
     @classmethod
     def device_pid(cls):
         global format_serialno
-        _cmd = "adb " + format_serialno + " shell ps system_server | awk 'NR==2{print $2}'"
+        _cmd = Adb.adb + format_serialno + " shell ps system_server | awk 'NR==2{print $2}'"
         return cls._execute(_cmd)
  
     @classmethod
@@ -87,7 +122,8 @@ class DeviceSerialno(object):
         # 'List of devices attached\nemulator-5556\tdevice\nemulator-5554\tdevice\n\n'
         serialno_list = []
         try:
-            for line in cls._execute("adb devices").split("\n"):
+            devices = Adb.adb + " devices"
+            for line in cls._execute(devices).split("\n"):
                 if "\tdevice" in line:
                     serialno_list.append(line.split("\t")[0])
         except Exception as e:
@@ -191,11 +227,11 @@ class PullLog(object):
         self._execute.wait_for_execute()
 
     def pull(self, save_path, error_path):
-        _pull_cmd = "adb " + format_serialno + " pull " + error_path + " " + save_path
+        _pull_cmd = Adb.adb + format_serialno + " pull " + error_path + " " + save_path
         self._do_cmd(_pull_cmd)
 
     def clear(self, error_path):
-        _clear_cmd = "adb " + format_serialno + " shell rm -rf " + error_path
+        _clear_cmd = Adb.adb + format_serialno + " shell rm -rf " + error_path
         self._do_cmd(_clear_cmd)
 
     def pull_anr(self, save_path="./"):
@@ -214,7 +250,7 @@ class PullLog(object):
         _stamp = Time.get_format_time(format_time="%Y%m%d%H%M%S")
         _tmp_pic_pathname = self._pic_path + _stamp + ".png"
 
-        _screenshot_cmd = "adb " + format_serialno + " shell screencap -p " + _tmp_pic_pathname
+        _screenshot_cmd = Adb.adb + format_serialno + " shell screencap -p " + _tmp_pic_pathname
 
         self._do_cmd(_screenshot_cmd)
         self.pull(save_path, _tmp_pic_pathname)
@@ -236,7 +272,7 @@ class DumpsysInfo(object):
 
  
     def get(self, cmd=""):
-        _format_dump_cmd = "adb " + format_serialno + " shell dumpsys " + cmd
+        _format_dump_cmd = Adb.adb + format_serialno + " shell dumpsys " + cmd
         self._execute.execute_command(_format_dump_cmd)
         return self._execute.read_stdout()
 
@@ -434,7 +470,7 @@ class Logcat(object):
         self._execute = Execute()
 
     def _format_logcat_cmd(self, buff="all", format_put="threadtime"):
-        return "adb " + format_serialno + " logcat " + " -v " + format_put + " -b " + buff
+        return Adb.adb + format_serialno + " logcat " + " -v " + format_put + " -b " + buff
 
     def start_logcat(self, buff="all", format_put="threadtime"):
         self._execute.execute_command(self._format_logcat_cmd(buff=buff, format_put=format_put))
@@ -457,7 +493,7 @@ class Logcat(object):
             pass
 
     def clear_buff(self):
-        _claar_buff_cmd = "adb " + format_serialno + " logcat -c -b all"
+        _claar_buff_cmd = Adb.adb + format_serialno + " logcat -c -b all"
         self._execute.execute_command(_claar_buff_cmd)
         self._execute.wait_for_execute()
 
@@ -579,7 +615,7 @@ class Qualcomm(object):
 
 
 def get_platform_name():
-    pipe = os.popen("adb " + format_serialno + " shell getprop ro.hardware")
+    pipe = os.popen(Adb.adb + format_serialno + " shell getprop ro.hardware")
     if "mt" in pipe:
         return "MTK"
     elif "qcom" in pipe or "msm" in pipe:
@@ -593,7 +629,7 @@ def get_platform_name():
 if __name__=="__main__":
     # 测试监控接口
     os.environ.setdefault("REBOOT_TEST_FLAG", "True")
-    DeviceSerialno.connected_device(device="emulator-5554")
+    DeviceSerialno.connected_device(device="022BTF7N38043454")
     h = Monitor()
     h.lister()
     print os.getpid()

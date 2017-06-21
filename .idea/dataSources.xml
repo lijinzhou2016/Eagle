@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="A02AECNT224AZ.db" uuid="271a47c1-ec30-49a6-aeac-0d6203602410">
+    <data-source source="LOCAL" name="022BTF7N38043454.db" uuid="7ae4c764-d1f3-4ab3-9a7d-41a7af88fe79">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/../../eaglelog/20170609165650/A02AECNT224AZ/A02AECNT224AZ.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/../../eaglelog/20170620151618/022BTF7N38043454/022BTF7N38043454.db</jdbc-url>
       <driver-properties>
         <property name="enable_load_extension" value="true" />
       </driver-properties>

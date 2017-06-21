@@ -1849,7 +1849,7 @@ def create_log(module="myscript"):
     # 日志级别 ：
     logger.setLevel(DEBUG)
     # 创建一个handler，用于写入日志文件
-    print os.path.join(os.environ.get("m_log_path", "./"), 'case.log')
+    # print os.path.join(os.environ.get("m_log_path", "./"), 'case.log')
     fh = FileHandler(os.path.join(os.environ.pop("m_log_path", "./"), 'case.log'), mode="w")
     # 再创建一个handler，用于输出到控制台
     ch = StreamHandler()

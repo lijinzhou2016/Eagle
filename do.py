@@ -158,7 +158,7 @@ for L in range(int(loop)):
 
 
 db = database.connect_db(device_log_path, serialno)
-print type(db)
+# print type(db)
 time.sleep(1)
 
 db.add(summary)
@@ -186,7 +186,7 @@ for d in db.query(Detail).filter(Detail.state == 0).all():
         d.start_time = str(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())))
 
         run_case_cmd = "bash " + os.path.join(settings.BASE_DIR, "cmdline.sh") + " " + case_path + " " + d.case_name
-        print "="*20, d.case_name, " LOOP:", d.big_loop, " loop:", d.small_loop, "="*20, "\n"
+        print "\n\n", "="*20, d.case_name, " LOOP:", d.big_loop, " loop:", d.small_loop, "="*20
         print "Start time:", d.start_time
         db.commit()
         # print d.m_log_path
@@ -212,6 +212,7 @@ for d in db.query(Detail).filter(Detail.state == 0).all():
                 break
             if "Test Result - Failed" in line:
                 d.state=4
+                break
         if d.state == 1:
             d.state = 4
 

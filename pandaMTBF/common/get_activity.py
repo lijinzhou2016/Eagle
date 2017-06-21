@@ -6,7 +6,7 @@ import re
 
 #test = r'ActivityRecord{bdd425b u0 com.yunos.camera/.CameraActivity t63}'
 log = subprocess.Popen('adb shell dumpsys activity', shell=True, stdout=subprocess.PIPE).communicate()[0]
-
+print log
 p = "(ActivityRecord{)[^}]+(\w+\s|[^}]+Activity)"
 pp ="([a-zA-Z]+\.)[^}]+(\w+\s|[^}]+Activity)"
 
